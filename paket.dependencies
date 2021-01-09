@@ -1,0 +1,3 @@
+source https://api.nuget.org/v3/index.json
+nuget Suave
+nuget XPlot.Plotly >= 3.0.1
