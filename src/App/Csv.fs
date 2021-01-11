@@ -50,9 +50,9 @@ let genData (rows: int) =
 
 
 
-let genCsv (path: string) =
+let genCsv (path: string) (max: int) =
     let rows =
-        genData 20
+        genData max
         |> Seq.map
             (fun (product, price, boughtDate, user, seller) -> $"{product};{price};{boughtDate};{user};{seller};")
         |> Seq.toList
