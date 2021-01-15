@@ -4,5 +4,12 @@ open Application
 let main argv =
     App.WriteUsage()
     App.Usage()
-    Utils.Stdin.ConsoleStdin App.Parse |> ignore
+
+    let appState = App.Init()
+
+    let cmd state =
+        Utils.Stdin.ConsoleStdin App.Parse state
+
+    cmd appState |> ignore
+
     0 // return an integer exit code

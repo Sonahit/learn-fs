@@ -10,6 +10,7 @@
     <Compile Include="utils/*.fs" />
     <Compile Include="database/*.fs" />
     <Compile Include="commands/*.fs" />
+    <Compile Include="events/*.fs" />
     <Compile Include="./*.fs" />
   </ItemGroup>
 

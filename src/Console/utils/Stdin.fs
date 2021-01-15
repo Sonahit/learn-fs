@@ -4,19 +4,17 @@ namespace Application.Utils
 module Stdin =
     open System
 
-    let rec ConsoleStdin (cbk: string -> 't) =
+    let rec ConsoleStdin (cbk: string -> 'State -> 'State) (state: 'State) =
         Seq.initInfinite (fun _ -> Console.ReadLine())
         |> Seq.map
             (fun line ->
                 match line with
-                | "exit" -> 0
-                | l ->
-                    (cbk l |> ignore
-                     1))
+                | "exit" -> None
+                | l -> Some(cbk l state))
         |> Seq.item 0
         |> fun result ->
             match result with
-            | 1 -> ConsoleStdin cbk
+            | state when state.IsSome -> ConsoleStdin cbk state.Value
             | _ -> 0
 
     let rec ConsoleRequire (count: int) (rows: string list): string list list =
