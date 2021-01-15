@@ -1,6 +1,7 @@
 namespace Application.Commands
 
 module GetTasks =
+    open Application
     open Application.Utils.Regex
     open Application.Types.Commands
 
@@ -16,6 +17,6 @@ module GetTasks =
             | ParseRegex this.Regex _ -> true
             | _ -> false
 
-        override this.Execute line = printfn "%s" this.Usage |> ignore
+        override this.Execute line = printfn "%A" MemDatabase.Todos
 
     let Impl = GetTasks()

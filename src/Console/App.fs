@@ -45,13 +45,10 @@ module App =
         |> fun _ -> storage.Events.Clear()
 
     let Parse (line: string) (state: ApplicationState) =
+        printfn ""
+
         let cmd =
             Commands |> List.tryFind (fun el -> el.Match line)
-
-        let testEvent =
-            Events.Event(TestEvent.TestEventType, "hello_world")
-
-        state.EventStorage <- Events.addEvent testEvent state.EventStorage
 
         if cmd.IsSome then
             cmd.Value.Execute line

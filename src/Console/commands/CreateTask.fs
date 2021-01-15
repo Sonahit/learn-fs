@@ -2,6 +2,7 @@ namespace Application.Commands
 
 module CreateTask =
     open System.Text.RegularExpressions
+    open Application
     open Application.Utils.Regex
     open Application.Utils.Stdin
     open Application.Types.Commands
@@ -34,6 +35,10 @@ module CreateTask =
             let rows =
                 ConsoleRequire count (List.rev [ "name"; "description" ])
 
-            printfn "%A" rows
+            (List.map
+                ((fun (el: (string) list) -> (el.Item 0, el.Item 1))
+                 >> (fun (name, description) -> MemDatabase.AddTodo { Name = name }))
+                rows)
+            |> ignore
 
     let Impl = CreateTask()
