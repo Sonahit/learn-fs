@@ -1,6 +1,8 @@
 namespace Application.Commands
 
 module DeleteTask =
+    open System.Text.RegularExpressions
+    open Application
     open Application.Utils.Regex
     open Application.Types.Commands
 
@@ -13,6 +15,15 @@ module DeleteTask =
             | ParseRegex this.Regex _ -> true
             | _ -> false
 
-        override this.Execute line = printfn "%s" this.Usage |> ignore
+        override this.Execute line =
+            let m = Regex(this.Regex).Match(line.TrimEnd())
+
+            let groups =
+                List.tail [ for x in m.Groups -> x.Value ]
+
+            let id = int groups.Head
+
+            MemDatabase.TryGetTodo(id - 1)
+            |> MemDatabase.DeleteTodo
 
     let Impl = DeleteTask()

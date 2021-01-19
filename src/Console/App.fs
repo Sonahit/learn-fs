@@ -1,6 +1,4 @@
 namespace Application
-// TODO: Todo cli
-
 
 module App =
     open System.Collections.Generic
@@ -8,15 +6,15 @@ module App =
     open Application.Commands
     open Application.Types
     open Application.Types.Commands
-    open Application.Utils
 
 
     let Commands: Command list =
-        [ DeleteTask.Impl
-          CreateTask.Impl
+        [ CreateTask.Impl
+          DeleteTask.Impl
           UpdateTasks.Impl
           GetTask.Impl
-          GetTasks.Impl ]
+          GetTasks.Impl
+          HelpTask.Impl ]
 
     type ApplicationState =
         { mutable EventStorage: Events.EventStorage
@@ -45,15 +43,16 @@ module App =
         |> fun _ -> storage.Events.Clear()
 
     let Parse (line: string) (state: ApplicationState) =
-        printfn ""
 
         let cmd =
             Commands |> List.tryFind (fun el -> el.Match line)
 
-        if cmd.IsSome then
-            cmd.Value.Execute line
-        else
-            Stdout.log "Command not found"
+        match cmd with
+        | Some v ->
+            match v.Name with
+            | "help" -> Usage()
+            | _ -> v.Execute line
+        | _ -> printfn "%s" "Command not found"
 
         async { InvokeEvents state.EventStorage }
         |> Async.Start

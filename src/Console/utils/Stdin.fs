@@ -18,12 +18,15 @@ module Stdin =
             | _ -> 0
 
     let rec ConsoleRequire (count: int) (rows: string list): string list list =
-        printfn
-            "Required: %s"
+        let args =
             (rows
              |> List.fold (fun acc el -> if acc = "" then el else el + "; " + acc) "")
 
-        Seq.init count (fun _ -> Console.ReadLine())
+        Seq.init
+            count
+            (fun _ ->
+                printfn "Required: %s" args |> ignore
+                Console.ReadLine())
         |> Seq.map
             (fun line ->
                 let words: string array = line.Split [| ' ' |]

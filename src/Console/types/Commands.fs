@@ -1,6 +1,7 @@
 namespace Application.Types
 
 module Commands =
+    open System
 
     [<AbstractClass>]
     type Command(name: string, usage: string) =

@@ -27,18 +27,20 @@ module CreateTask =
             let defaultCount = 1
 
             let count =
-                if groups.Head = "" then
-                    defaultCount
-                else
-                    int groups.Head
+                match groups.Head with
+                | "" -> defaultCount
+                | _ -> int groups.Head
 
             let rows =
-                ConsoleRequire count (List.rev [ "name"; "description" ])
+                ConsoleRequire count (List.rev [ "name" ])
 
-            (List.map
-                ((fun (el: (string) list) -> (el.Item 0, el.Item 1))
-                 >> (fun (name, description) -> MemDatabase.AddTodo { Name = name }))
-                rows)
+            rows
+            |> List.map (fun (el: (string) list) -> (el.Item 0))
+            |> List.iter (fun name -> MemDatabase.AddTodo { Name = name })
             |> ignore
+
+
+            MemDatabase.Todos
+            |> Array.iteri (fun id el -> printfn "%d. Todo -> Name = %s" (id + 1) el.Name)
 
     let Impl = CreateTask()

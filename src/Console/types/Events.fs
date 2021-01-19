@@ -23,17 +23,16 @@ module Events =
         let contains = oldEvents.ContainsKey evType
 
         let events =
-            if contains then
-                oldEvents.[evType]
-            else
-                []
+            match contains with
+            | true -> oldEvents.[evType]
+            | false -> []
 
         let newEvents = List.append events [ ev ]
 
-        if contains then
-            oldEvents.[evType] <- newEvents
-        else
-            oldEvents.Add(evType, newEvents)
+        match contains with
+        | true -> oldEvents.[evType] <- newEvents
+        | false -> oldEvents.Add(evType, newEvents)
+
 
         { storage with Events = oldEvents }
 
